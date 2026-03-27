@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>给茸茸宝宝的专属情话</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Microsoft YaHei", "SimHei", sans-serif;
+        }
+
+        body {
+            background-color: #fdf2f8; /* 温柔粉色背景 */
+            overflow: hidden; /* 隐藏滚动条 */
+            height: 100vh;
+            position: relative;
+        }
+
+        /* 漂浮弹窗样式 - 缩小弹窗尺寸，适配更多数量 */
+        .float-box {
+            position: absolute;
+            padding: 12px 20px; /* 缩小内边距 */
+            background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 99%, #fad0c4 100%);
+            border-radius: 50px;
+            color: #fff;
+            font-size: 14px; /* 缩小字体 */
+            box-shadow: 0 4px 15px rgba(255, 154, 158, 0.3);
+            z-index: 10;
+            cursor: default;
+            user-select: none;
+            /* 初始动画：漂浮+渐变 */
+            animation: float 8s ease-in-out infinite, fadeOut 15s forwards;
+            opacity: 0;
+        }
+
+        /* 最后固定弹窗样式 */
+        .fixed-box {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            padding: 25px 40px;
+            background: linear-gradient(135deg, #ff6b6b 0%, #ff8e8e 100%);
+            border-radius: 60px;
+            color: #fff;
+            font-size: 24px;
+            font-weight: bold;
+            box-shadow: 0 8px 30px rgba(255, 107, 107, 0.5);
+            z-index: 100;
+            opacity: 0;
+            animation: showFixed 2s ease-in-out 18s forwards; /* 延迟18s显示 */
+            text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        /* 漂浮动画 */
+        @keyframes float {
+            0% {
+                transform: translateY(0) rotate(0deg);
+            }
+            50% {
+                transform: translateY(-30px) rotate(2deg);
+            }
+            100% {
+                transform: translateY(0) rotate(0deg);
+            }
+        }
+
+        /* 渐隐动画 */
+        @keyframes fadeOut {
+            0% {
+                opacity: 1;
+            }
+            80% {
+                opacity: 1;
+            }
+            100% {
+                opacity: 0;
+                visibility: hidden;
+            }
+        }
+
+        /* 固定弹窗显示动画 */
+        @keyframes showFixed {
+            0% {
+                opacity: 0;
+                transform: translate(-50%, -50%) scale(0.8);
+            }
+            100% {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1);
+            }
+        }
+    </style>
+</head>
+<body>
+    <script>
+        // 情话+关心语句库
+        const messages = [
+            "茸茸宝宝，今天有没有好好吃饭呀😘",
+            "想你的时候，风都超级甜~",
+            "不许熬夜哦，要乖乖睡觉💤",
+            "我的宝贝，做什么都超棒的！",
+            "天冷啦，记得多穿件衣服🧣",
+            "不管怎样，我都永远陪着你",
+            "你一笑，我的世界都亮了✨",
+            "累了就歇会儿，我在呢~",
+            "超超超喜欢你的呀❤️",
+            "愿你的每一天都甜甜蜜蜜",
+            "我的茸茸，是最可爱的小宝贝",
+            "记得多喝水，照顾好自己🥤",
+            "遇见你，是我最幸运的事",
+            "抱抱你，所有不开心都走开~",
+            "我对你的爱，藏在每一个瞬间",
+            "今天也要开开心心的哦😜",
+            "你是我藏在微风里的喜欢",
+            "把所有温柔都给你💖",
+            "我的心永远为你跳动",
+            "有你在，每天都是好日子"
+        ];
+
+        // 生成随机数（范围）
+        function getRandom(min, max) {
+            return Math.random() * (max - min) + min;
+        }
+
+        // 创建漂浮弹窗
+        function createFloatBox() {
+            const box = document.createElement("div");
+            box.className = "float-box";
+            
+            // 随机选一句话
+            const randomMsg = messages[Math.floor(getRandom(0, messages.length))];
+            box.textContent = randomMsg;
+
+            // 扩大随机位置范围，让弹窗分布更满
+            const winWidth = window.innerWidth;
+            const winHeight = window.innerHeight;
+            box.style.left = `${getRandom(20, winWidth - 180)}px`;
+            box.style.top = `${getRandom(20, winHeight - 80)}px`;
+
+            // 随机动画延迟和时长（让弹窗分批出现/消失）
+            box.style.animationDelay = `${getRandom(0, 6)}s`;
+            box.style.animationDuration = `${getRandom(10, 20)}s`;
+
+            document.body.appendChild(box);
+
+            // 移除已消失的弹窗（避免内存占用）
+            setTimeout(() => {
+                box.remove();
+            }, 20000);
+        }
+
+        // 批量创建漂浮弹窗（增加数量+加快生成速度）
+        function createFloatBoxes() {
+            let count = 0;
+            // 总共生成50个弹窗，每150ms生成一个（更快更密集）
+            const interval = setInterval(() => {
+                createFloatBox();
+                count++;
+                if (count >= 50) { // 弹窗数量从20→50，可根据需求调整
+                    clearInterval(interval);
+                    // 创建最后固定弹窗
+                    createFixedBox();
+                }
+            }, 150); // 生成间隔从300ms→150ms，弹窗出现更快
+        }
+
+        // 创建最后固定弹窗
+        function createFixedBox() {
+            const fixedBox = document.createElement("div");
+            fixedBox.className = "fixed-box";
+            fixedBox.textContent = "永远爱我的茸茸宝宝~";
+            document.body.appendChild(fixedBox);
+        }
+
+        // 页面加载后开始执行
+        window.onload = function() {
+            createFloatBoxes();
+        };
+    </script>
+</body>
+</html>
